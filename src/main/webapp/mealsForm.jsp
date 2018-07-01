@@ -20,7 +20,7 @@
         </caption>
         <input type="hidden" name="id" value="<c:out value="${meal == null ? '' : meal.id}"/>"/>
         <tr>
-            <th>Date:</th>
+            <th>Date and time:</th>
             <td>
                 <input type="text" name="dateTime" size="45"
                        value="<c:out value="${meal == null ? '' : f:formatLocalDateTime(meal.dateTime)}"/>"/>

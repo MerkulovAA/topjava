@@ -14,7 +14,7 @@
 <div align="center">
     <table border="1" cellpadding="5">
         <tr>
-            <th>Date</th>
+            <th>Date and time</th>
             <th>Description</th>
             <th>Calories</th>
             <th>Action</th>
@@ -22,7 +22,7 @@
         </tr>
         <c:forEach var="meal" items="${mealWithExceeds}">
 
-            <tr style="${meal.exceed ? 'background-color: red': ''}">
+            <tr style="${meal.exceed ? 'background-color: red': 'background-color: green'}">
                 <td><c:out value="${f:formatLocalDateTime(meal.dateTime)}"/></td>
                 <td><c:out value="${meal.description}"/></td>
                 <td><c:out value="${meal.calories}"/></td>

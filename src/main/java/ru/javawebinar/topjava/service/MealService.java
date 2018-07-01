@@ -4,31 +4,29 @@ package ru.javawebinar.topjava.service;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.dao.Dao;
 import ru.javawebinar.topjava.model.Meal;
-
-import java.util.List;
-
+import java.util.Collection;
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class MealService implements Service<Meal>{
+public class MealService implements Service<Integer, Meal> {
 
     private static final Logger log = getLogger(MealService.class);
 
-    private Dao<Meal> dao;
+    private Dao<Integer, Meal> dao;
 
-    public MealService(Dao<Meal> dao) {
+    public MealService(Dao<Integer, Meal> dao) {
         this.dao = dao;
     }
 
     @Override
-    public List<Meal> getAll() {
+    public Collection<Meal> getAll() {
         log.info("getAll in service");
         return dao.getAll();
     }
 
     @Override
-    public void create(Meal meal) {
+    public Meal create(Meal meal) {
         log.info("create in service");
-        dao.create(meal);
+        return dao.create(meal);
     }
 
     @Override
@@ -44,7 +42,7 @@ public class MealService implements Service<Meal>{
     }
 
     @Override
-    public Meal getById(int id) {
+    public Meal getById(Integer id) {
         log.info("getById in service");
         return dao.getById(id);
     }

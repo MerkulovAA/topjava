@@ -1,44 +1,45 @@
 package ru.javawebinar.topjava.service;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
+
 
 /**
  * Interface for defining service functions.
- * @param <T> - type of object
+ * @param <K> - id
+ * @param <V> - object meal
  */
-
-public interface Service<T extends Serializable> {
+public interface Service<K, V extends Serializable> {
 
     /**
      * Method for get objects
      * @return all list objects
      */
-    List<T> getAll();
+    Collection<V> getAll();
 
     /**
      * Method for storing a new object in the repository
      * @param object saved object
      */
-    void create(T object);
+    V create(V object);
 
     /**
      * Method for updating an object in the repository
      * @param object updated object
      */
-    void update(T object);
+    void update(V object);
 
     /**
      * Method for removing an object from the storage
      * @param object an object to be deleted
      */
-    void delete(T object);
+    void delete(V object);
 
     /**
      * Method for obtaining an object by id
      * @param id id of the object
      * @return object return
      */
-    T getById(int id);
+    V getById(Integer id);
 
 }
