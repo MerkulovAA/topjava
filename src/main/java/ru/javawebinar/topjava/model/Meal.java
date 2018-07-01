@@ -8,21 +8,14 @@ import java.util.Objects;
 
 public class Meal implements Serializable {
 
-    private int id;
+    private final int id;
 
-    private LocalDateTime dateTime;
+    private final LocalDateTime dateTime;
 
-    private String description;
+    private final String description;
 
-    private int calories;
+    private final int calories;
 
-
-    public Meal() {
-    }
-
-    public Meal(int id) {
-        this.id = id;
-    }
 
     public Meal(int id, LocalDateTime dateTime, String description, int calories) {
         this.id = id;
@@ -31,11 +24,6 @@ public class Meal implements Serializable {
         this.calories = calories;
     }
 
-    public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.dateTime = dateTime;
-        this.description = description;
-        this.calories = calories;
-    }
 
     public int getId() {
         return id;
@@ -61,21 +49,6 @@ public class Meal implements Serializable {
         return dateTime.toLocalTime();
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setCalories(int calories) {
-        this.calories = calories;
-    }
 
     @Override
     public boolean equals(Object o) {

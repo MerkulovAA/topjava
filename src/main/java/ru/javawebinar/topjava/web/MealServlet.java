@@ -100,8 +100,7 @@ public class MealServlet extends HttpServlet {
         LocalDateTime localDateTime = DateFormatter.getDateTime(dateTime);
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
-
-        Meal meal = new Meal(localDateTime, description, calories);
+        Meal meal = new Meal(0, localDateTime, description, calories);
         mealService.create(meal);
         response.sendRedirect("meals");
     }
@@ -113,7 +112,6 @@ public class MealServlet extends HttpServlet {
         LocalDateTime localDateTime = DateFormatter.getDateTime(dateTime);
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
-
         Meal meal = new Meal(id, localDateTime, description, calories);
         mealService.update(meal);
         response.sendRedirect("meals");
@@ -122,7 +120,7 @@ public class MealServlet extends HttpServlet {
     private void delete(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Meal meal = new Meal(id);
+        Meal meal = mealService.getById(id);
         mealService.delete(meal);
         response.sendRedirect("meals");
     }

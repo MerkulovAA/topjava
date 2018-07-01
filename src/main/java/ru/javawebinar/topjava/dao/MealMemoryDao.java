@@ -53,20 +53,15 @@ public class MealMemoryDao implements Dao<Meal> {
     @Override
     public synchronized void create(Meal object) {
         log.info("create object meal");
-        object.setId(getGenerateID());
-        meals.add(object);
+        meals.add(new Meal(getGenerateID(), object.getDateTime(), object.getDescription(), object.getCalories()));
     }
 
     @Override
     public synchronized void update(Meal object) {
         log.info("update object meal");
         Meal oldMeal = getById(object.getId());
-        if (oldMeal != null) {
-            oldMeal.setDescription(object.getDescription());
-            oldMeal.setDateTime(object.getDateTime());
-            oldMeal.setCalories(object.getCalories());
-        }
-
+        meals.set(meals.indexOf(oldMeal), new Meal(object.getId(), object.getDateTime(),
+                object.getDescription(),object.getCalories()));
     }
 
     @Override
