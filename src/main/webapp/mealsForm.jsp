@@ -22,8 +22,8 @@
         <tr>
             <th>Date and time:</th>
             <td>
-                <input type="text" name="dateTime" size="45"
-                       value="<c:out value="${meal == null ? '' : f:formatLocalDateTime(meal.dateTime)}"/>"/>
+                <input type="datetime-local" name="dateTime" size="45"
+                       value="<c:out value="${meal == null ? '' : meal.dateTime}"/>"/>
             </td>
         </tr>
         <tr>

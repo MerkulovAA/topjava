@@ -12,8 +12,8 @@ public final class DateFormatter {
         return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public static LocalDateTime getDateTime(String localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return LocalDateTime.parse(localDateTime, formatter);
+    public static LocalDateTime getDateTime(String dateTime) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(dateTime.replace('T', ' '), formatter);
     }
 }
