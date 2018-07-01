@@ -33,7 +33,12 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
+        doGet(req, resp);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
         resp.setCharacterEncoding("UTF-8");
         req.setCharacterEncoding("UTF-8");
         String action = req.getParameter("action");

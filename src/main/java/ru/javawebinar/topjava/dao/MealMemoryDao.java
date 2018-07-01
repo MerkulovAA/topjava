@@ -45,20 +45,20 @@ public class MealMemoryDao implements Dao<Meal> {
     }
 
     @Override
-    public List<Meal> getAll() {
+    public synchronized List<Meal> getAll() {
         log.info("get all meals");
         return meals;
     }
 
     @Override
-    public void create(Meal object) {
+    public synchronized void create(Meal object) {
         log.info("create object meal");
         object.setId(getGenerateID());
         meals.add(object);
     }
 
     @Override
-    public void update(Meal object) {
+    public synchronized void update(Meal object) {
         log.info("update object meal");
         Meal oldMeal = getById(object.getId());
         if (oldMeal != null) {
@@ -70,13 +70,13 @@ public class MealMemoryDao implements Dao<Meal> {
     }
 
     @Override
-    public void delete(Meal object) {
+    public synchronized void delete(Meal object) {
         log.info("delete object meal");
         meals.remove(object);
     }
 
     @Override
-    public Meal getById(int id) {
+    public synchronized Meal getById(int id) {
         log.info("get by id object meal");
         for (Meal meal : meals) {
             if (meal.getId() == id) {
@@ -86,7 +86,7 @@ public class MealMemoryDao implements Dao<Meal> {
         return null;
     }
 
-    private int getGenerateID() {
+    private synchronized int getGenerateID() {
         log.info("generate id for object");
         if (id.get() == 0) {
             id.set(meals.stream().map(Meal::getId).max(Integer::compareTo).orElse(0));
