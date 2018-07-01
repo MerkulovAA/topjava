@@ -7,12 +7,9 @@
     <title>Meals</title>
 </head>
 <body>
+<h3><a href="index.html">Home</a></h3>
 <center>
     <h1>Meals</h1>
-    <h2>
-        <a href="meals">List All Meals</a>
-
-    </h2>
 </center>
 <div align="center">
     <table border="1" cellpadding="5">
@@ -20,16 +17,26 @@
             <th>Date</th>
             <th>Description</th>
             <th>Calories</th>
+            <th>Action</th>
+
         </tr>
         <c:forEach var="meal" items="${mealWithExceeds}">
 
             <tr style="${meal.exceed ? 'background-color: red': ''}">
-                <td><c:out value="${f:formatLocalDateTime(meal.dateTime, 'yyyy-MM-dd HH:mm:ss')}"/></td>
+                <td><c:out value="${f:formatLocalDateTime(meal.dateTime)}"/></td>
                 <td><c:out value="${meal.description}"/></td>
                 <td><c:out value="${meal.calories}"/></td>
-                            </tr>
+                <td>
+                    <a href="meals?action=edit&id=<c:out value='${meal.id}' />">Edit</a>
+
+                    <a href="meals?action=delete&id=<c:out value='${meal.id}' />">Delete</a>
+                </td>
+            </tr>
         </c:forEach>
     </table>
+    <h3>
+        <a href="meals?action=new">Add New Meal</a>
+    </h3>
 </div>
 
 </body>
