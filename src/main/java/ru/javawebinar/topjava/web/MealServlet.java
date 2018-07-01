@@ -43,19 +43,19 @@ public class MealServlet extends HttpServlet {
                     showNewForm(req, resp);
                     break;
                 case "create":
-                    createMeal(req, resp);
+                    create(req, resp);
                     break;
                 case "delete":
-                    deleteMeal(req, resp);
+                    delete(req, resp);
                     break;
                 case "edit":
                     showEditForm(req, resp);
                     break;
                 case "update":
-                    updateMeal(req, resp);
+                    update(req, resp);
                     break;
                 default:
-                    listMeals(req, resp);
+                    list(req, resp);
                     break;
             }
         } catch (ServletException | IOException e) {
@@ -63,7 +63,7 @@ public class MealServlet extends HttpServlet {
         }
     }
 
-    private void listMeals(HttpServletRequest request, HttpServletResponse response)
+    private void list(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         List<Meal> listMeals = mealService.getAll();
         List<MealWithExceed> mealWithExceeds = MealsUtil.getFilteredWithExceeded(listMeals,
@@ -89,7 +89,7 @@ public class MealServlet extends HttpServlet {
 
     }
 
-    private void createMeal(HttpServletRequest request, HttpServletResponse response)
+    private void create(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         String dateTime = request.getParameter("dateTime");
         LocalDateTime localDateTime = DateFormatter.getDateTime(dateTime);
@@ -101,7 +101,7 @@ public class MealServlet extends HttpServlet {
         response.sendRedirect("meals");
     }
 
-    private void updateMeal(HttpServletRequest request, HttpServletResponse response)
+    private void update(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         String dateTime = request.getParameter("dateTime");
@@ -114,7 +114,7 @@ public class MealServlet extends HttpServlet {
         response.sendRedirect("meals");
     }
 
-    private void deleteMeal(HttpServletRequest request, HttpServletResponse response)
+    private void delete(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Meal meal = new Meal(id);
