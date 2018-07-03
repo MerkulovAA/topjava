@@ -18,9 +18,7 @@ public class MealMemoryDao implements Dao<Integer, Meal> {
 
     private static final AtomicInteger id = new AtomicInteger(0);
 
-    private volatile static MealMemoryDao instance;
-
-    private MealMemoryDao() {
+    public MealMemoryDao() {
         this.meals = new ConcurrentHashMap<>();
         create(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
         create(new Meal(2, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
@@ -30,25 +28,14 @@ public class MealMemoryDao implements Dao<Integer, Meal> {
         create(new Meal(6, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
     }
 
-    public static MealMemoryDao getInstance() {
-        if (instance == null) {
-            synchronized (MealMemoryDao.class) {
-                if (instance == null) {
-                    instance = new MealMemoryDao();
-                }
-            }
-        }
-        return instance;
-    }
-
     @Override
-    public synchronized Collection<Meal> getAll() {
+    public Collection<Meal> getAll() {
         log.info("get all meals");
         return meals.values();
     }
 
     @Override
-    public synchronized Meal create(Meal object) {
+    public Meal create(Meal object) {
         log.info("create object meal");
         Integer id = getGenerateId();
         Meal meal = new Meal(id, object.getDateTime(), object.getDescription(), object.getCalories());
@@ -57,20 +44,21 @@ public class MealMemoryDao implements Dao<Integer, Meal> {
     }
 
     @Override
-    public synchronized void update(Meal object) {
+    public Meal update(Meal object) {
         log.info("update object meal");
-        meals.replace(object.getId(), new Meal(object.getId(), object.getDateTime(),
-                object.getDescription(), object.getCalories()));
+        Meal meal = new Meal(object.getId(), object.getDateTime(), object.getDescription(), object.getCalories());
+        meals.replace(object.getId(), meal);
+        return meal;
     }
 
     @Override
-    public synchronized void delete(Meal object) {
+    public void delete(Integer id) {
         log.info("delete object meal");
-        meals.remove(object.getId(), object);
+        meals.remove(id);
     }
 
     @Override
-    public synchronized Meal getById(Integer id) {
+    public Meal getById(Integer id) {
         log.info("get by id object meal");
         return meals.get(id);
     }

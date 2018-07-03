@@ -30,15 +30,16 @@ public class MealService implements Service<Integer, Meal> {
     }
 
     @Override
-    public void update(Meal meal) {
+    public Meal update(Meal meal) {
         log.info("update in service");
         dao.update(meal);
+        return meal;
     }
 
     @Override
-    public void delete(Meal meal) {
+    public void delete(Integer id) {
         log.info("delete in service");
-        dao.delete(meal);
+        dao.delete(id);
     }
 
     @Override

@@ -7,7 +7,7 @@ import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.DateFormatter;
 import ru.javawebinar.topjava.util.MealsUtil;
-import javax.servlet.RequestDispatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
@@ -30,7 +31,7 @@ public class MealServlet extends HttpServlet {
     public void init() throws ServletException {
         log.info("Start init MealServlet");
         super.init();
-        mealService = new MealService(MealMemoryDao.getInstance());
+        mealService = new MealService(new MealMemoryDao());
     }
 
     @Override
@@ -43,7 +44,7 @@ public class MealServlet extends HttpServlet {
                 update(req, resp);
             if ("create".equals(action))
                 create(req, resp);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("error in servlet doPost", e.getMessage());
         }
     }
@@ -68,35 +69,28 @@ public class MealServlet extends HttpServlet {
                     list(req, resp);
                     break;
             }
-        } catch (ServletException | IOException e) {
+        } catch (Exception e) {
             log.error("error in servlet doGet", e.getCause());
         }
     }
 
     private void list(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        List<Meal> listMeals = new ArrayList<>(mealService.getAll());
-        List<MealWithExceed> mealWithExceeds = MealsUtil.getFilteredWithExceeded(listMeals,
+        List<MealWithExceed> mealWithExceeds = MealsUtil.getFilteredWithExceeded(new ArrayList<>(mealService.getAll()),
                 LocalTime.MIN, LocalTime.MAX, 2000);
         request.setAttribute("mealWithExceeds", mealWithExceeds);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("meals.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("mealsForm.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("mealsForm.jsp").forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Meal existingMeal = mealService.getById(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("mealsForm.jsp");
-        request.setAttribute("meal", existingMeal);
-        dispatcher.forward(request, response);
-
+        request.setAttribute("meal", mealService.getById(Integer.valueOf(request.getParameter("id"))));
+        request.getRequestDispatcher("mealsForm.jsp").forward(request, response);
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response)
@@ -105,24 +99,19 @@ public class MealServlet extends HttpServlet {
         response.sendRedirect("meals");
     }
 
-       private void update(HttpServletRequest request, HttpServletResponse response)
+    private void update(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        mealService.update(getObject(request, id));
+        mealService.update(getObject(request, Integer.valueOf(request.getParameter("id"))));
         response.sendRedirect("meals");
     }
 
-    private void delete(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Meal meal = mealService.getById(id);
-        mealService.delete(meal);
+    private void delete( HttpServletRequest request, HttpServletResponse response) throws IOException {
+        mealService.delete(Integer.valueOf(request.getParameter("id")));
         response.sendRedirect("meals");
     }
 
     private Meal getObject(HttpServletRequest request, int id) {
-        String dateTime = request.getParameter("dateTime");
-        LocalDateTime localDateTime = DateFormatter.getDateTime(dateTime);
+        LocalDateTime localDateTime = DateFormatter.getDateTime(request.getParameter("dateTime"));
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
         return new Meal(id, localDateTime, description, calories);

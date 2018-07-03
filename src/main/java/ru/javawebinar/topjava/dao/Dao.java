@@ -29,13 +29,13 @@ public interface Dao<K, V extends Serializable> {
      * Method for updating an object in the repository
      * @param object updated object
      */
-    void update(V object);
+    V update(V object);
 
     /**
      * Method for removing an object from the storage
-     * @param object an object to be deleted
+     * @param id - id by object to be deleted
      */
-    void delete(V object);
+    void delete(Integer id);
 
     /**
      * Method for obtaining an object by id
