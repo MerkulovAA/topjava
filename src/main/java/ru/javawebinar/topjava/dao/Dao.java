@@ -35,13 +35,13 @@ public interface Dao<K, V extends Serializable> {
      * Method for removing an object from the storage
      * @param id - id by object to be deleted
      */
-    void delete(Integer id);
+    void delete(K id);
 
     /**
      * Method for obtaining an object by id
      * @param id id of the object
      * @return object return
      */
-    V getById(Integer id);
+    V getById(K id);
 
 }

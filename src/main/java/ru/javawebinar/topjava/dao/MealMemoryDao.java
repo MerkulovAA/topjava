@@ -16,7 +16,7 @@ public class MealMemoryDao implements Dao<Integer, Meal> {
 
     private final Map<Integer, Meal> meals;
 
-    private static final AtomicInteger id = new AtomicInteger(0);
+    private final AtomicInteger id = new AtomicInteger(0);
 
     public MealMemoryDao() {
         this.meals = new ConcurrentHashMap<>();
@@ -48,7 +48,7 @@ public class MealMemoryDao implements Dao<Integer, Meal> {
         log.info("update object meal");
         Meal meal = new Meal(object.getId(), object.getDateTime(), object.getDescription(), object.getCalories());
         meals.replace(object.getId(), meal);
-        return meal;
+        return meals.containsValue(meal) ? meal : null;
     }
 
     @Override
