@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -42,10 +42,11 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             meal.setUserId(userId);
             repository.put(meal.getId(), meal);
             return meal;
+        } else if (meal.getUserId() == userId) {
+            // treat case: update, but absent in storage
+            return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
         }
-        // treat case: update, but absent in storage
-        meal.setUserId(userId);
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        return null;
     }
 
     @Override
@@ -73,8 +74,22 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         log.info("getAll");
         return repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId)
-                .sorted(Comparator.comparing(Meal::getDate).reversed())
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public List<Meal> getFilterByTime(LocalTime start, LocalTime end, int userId) {
+        return getAll(userId).stream()
+                .filter(meal -> DateTimeUtil.isBetween(meal.getTime(), start, end))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Meal> getFilterByDate(LocalDate start, LocalDate end, int userId) {
+        return getAll(userId).stream()
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), start, end))
+                .collect(Collectors.toList());
     }
 }
 
