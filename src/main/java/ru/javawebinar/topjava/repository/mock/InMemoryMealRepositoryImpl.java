@@ -42,7 +42,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             meal.setUserId(userId);
             repository.put(meal.getId(), meal);
             return meal;
-        } else if (repository.get(meal.getId()).getUserId() == userId) {
+        } else if (repository.get(meal.getId()) != null && repository.get(meal.getId()).getUserId() == userId) {
             meal.setUserId(userId);
             // treat case: update, but absent in storage
             return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
