@@ -57,13 +57,19 @@ public class MealServlet extends HttpServlet {
             String endDate;
             String startTime;
             String endTime;
-            List<MealWithExceed> filterMeals = null;
+            LocalDate startLocalDate = LocalDate.MIN ;
+            LocalDate endLocalDate = LocalDate.MAX;
+            List<MealWithExceed> filterMeals = controller.getAll();
             if (!((startDate = request.getParameter("startDate")).equals("")) &&
                     !((endDate = request.getParameter("endDate")).equals(""))) {
-                filterMeals = controller.getFilterByDate(LocalDate.parse(startDate), LocalDate.parse(endDate));
-            } else if (!((startTime = request.getParameter("startTime")).equals("")) &&
+                startLocalDate = LocalDate.parse(startDate);
+                endLocalDate = LocalDate.parse(endDate);
+                filterMeals = controller.getFilterByDate(startLocalDate, endLocalDate);
+            }
+            if (!((startTime = request.getParameter("startTime")).equals("")) &&
                     !((endTime = request.getParameter("endTime")).equals(""))) {
-                filterMeals = controller.getFilterByTime(LocalTime.parse(startTime), LocalTime.parse(endTime));
+                filterMeals = controller.getFilterByTime(startLocalDate, endLocalDate,LocalTime.parse(startTime),
+                        LocalTime.parse(endTime));
             }
             request.setAttribute("meals", filterMeals);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
@@ -73,9 +79,7 @@ public class MealServlet extends HttpServlet {
             Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
-                    Integer.parseInt(request.getParameter("calories")),
-                    Integer.parseInt(request.getParameter("userId")));
-
+                    Integer.parseInt(request.getParameter("calories")));
             log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
             if (meal.isNew()) {
                 controller.create(meal);

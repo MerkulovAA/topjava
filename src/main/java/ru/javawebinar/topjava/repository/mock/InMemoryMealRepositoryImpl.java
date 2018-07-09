@@ -42,7 +42,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             meal.setUserId(userId);
             repository.put(meal.getId(), meal);
             return meal;
-        } else if (meal.getUserId() == userId) {
+        } else if (repository.get(meal.getId()).getUserId() == userId) {
+            meal.setUserId(userId);
             // treat case: update, but absent in storage
             return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
         }
@@ -54,7 +55,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         log.info("delete {}", id);
         Meal meal = repository.get(id);
         if (meal != null && meal.getUserId() == userId) {
-            return repository.remove(id, meal);
+            repository.remove(id);
+            return true;
         } else
             return false;
     }
@@ -70,7 +72,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
+    public List<Meal> getAll(int userId) {
         log.info("getAll");
         return repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId)
@@ -79,16 +81,16 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public List<Meal> getFilterByTime(LocalTime start, LocalTime end, int userId) {
+    public List<Meal> getFilterByDate(LocalDate start, LocalDate end, int userId) {
         return getAll(userId).stream()
-                .filter(meal -> DateTimeUtil.isBetween(meal.getTime(), start, end))
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), start, end))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Meal> getFilterByDate(LocalDate start, LocalDate end, int userId) {
-        return getAll(userId).stream()
-                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), start, end))
+    public List<Meal> getFilterByTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, int userId) {
+        return getFilterByDate(startDate, endDate, userId).stream()
+                .filter(meal -> DateTimeUtil.isBetween(meal.getTime(), startTime, endTime))
                 .collect(Collectors.toList());
     }
 }

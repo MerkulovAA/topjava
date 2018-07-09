@@ -10,7 +10,6 @@ import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -30,7 +29,7 @@ public class MealRestController {
         this.service = service;
     }
 
-    public Collection<MealWithExceed> getAll() {
+    public List<MealWithExceed> getAll() {
         log.info("getAll");
         return MealsUtil.getWithExceeded(service.getAll(getAuthUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
 
@@ -58,12 +57,13 @@ public class MealRestController {
         service.update(meal, getAuthUserId());
     }
 
-    public List<MealWithExceed> getFilterByTime(LocalTime start, LocalTime end) {
-        return MealsUtil.getWithExceeded(service.getFilterTime(start, end, getAuthUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
-    }
-
     public List<MealWithExceed> getFilterByDate(LocalDate start, LocalDate end) {
-        return MealsUtil.getWithExceeded(service.getFilterDate(start, end, getAuthUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
-
+        return MealsUtil.getMealWithExceeds(service.getFilterDate(start, end, getAuthUserId()), getAll());
     }
+
+    public List<MealWithExceed> getFilterByTime(LocalDate startDate, LocalDate endDate, LocalTime start, LocalTime end) {
+        return MealsUtil.getMealWithExceeds(service.getFilterTime(startDate, endDate, start, end, getAuthUserId()), getAll());
+    }
+
+
 }
