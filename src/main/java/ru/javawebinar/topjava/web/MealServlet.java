@@ -53,27 +53,18 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
         if ("getFilterDateTime".equals(action)) {
-            String startDate;
-            String endDate;
-            String startTime;
-            String endTime;
-            LocalDate startLocalDate = LocalDate.MIN ;
-            LocalDate endLocalDate = LocalDate.MAX;
-            List<MealWithExceed> filterMeals = controller.getAll();
-            if (!((startDate = request.getParameter("startDate")).equals("")) &&
-                    !((endDate = request.getParameter("endDate")).equals(""))) {
-                startLocalDate = LocalDate.parse(startDate);
-                endLocalDate = LocalDate.parse(endDate);
-                filterMeals = controller.getFilterByDate(startLocalDate, endLocalDate);
-            }
-            if (!((startTime = request.getParameter("startTime")).equals("")) &&
-                    !((endTime = request.getParameter("endTime")).equals(""))) {
-                filterMeals = controller.getFilterByTime(startLocalDate, endLocalDate,LocalTime.parse(startTime),
-                        LocalTime.parse(endTime));
-            }
+            String startDate = request.getParameter("startDate");
+            String endDate = request.getParameter("endDate");
+            String startTime = request.getParameter("startTime");
+            String endTime = request.getParameter("endTime");
+            LocalDate startLocalDate = startDate.equals("") ? null : LocalDate.parse(startDate);
+            LocalDate endLocalDate = endDate.equals("") ? null: LocalDate.parse(endDate);
+            LocalTime startLocalTime = startTime.equals("") ? null: LocalTime.parse(startTime);
+            LocalTime endLocalTime = endTime.equals("") ? null : LocalTime.parse(endTime);
+            List<MealWithExceed> filterMeals = controller.getFilterByDateAndTime(startLocalDate, endLocalDate,
+                    startLocalTime, endLocalTime);
             request.setAttribute("meals", filterMeals);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
-
         } else {
             String id = request.getParameter("id");
             Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
@@ -93,7 +84,6 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
         switch (action == null ? "all" : action) {
             case "delete":
                 int id = getId(request);

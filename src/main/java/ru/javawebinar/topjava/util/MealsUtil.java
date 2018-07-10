@@ -36,15 +36,7 @@ public class MealsUtil {
                 .collect(toList());
     }
 
-    public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
+    private static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
         return new MealWithExceed(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
-    }
-
-    public static List<MealWithExceed> getMealWithExceeds(List<Meal> meals, List<MealWithExceed> mealWithExceeds){
-        Map<Integer, MealWithExceed> withExceedMap = new HashMap<>();
-        mealWithExceeds.forEach(mealWithExceed -> withExceedMap.put(mealWithExceed.getId(), mealWithExceed));
-        List<MealWithExceed> resultMealWithExceeds = new ArrayList<>();
-        meals.forEach(meal -> resultMealWithExceeds.add(withExceedMap.get(meal.getId())));
-        return resultMealWithExceeds;
     }
 }

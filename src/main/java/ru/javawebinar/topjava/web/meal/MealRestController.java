@@ -6,11 +6,13 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
@@ -31,7 +33,7 @@ public class MealRestController {
 
     public List<MealWithExceed> getAll() {
         log.info("getAll");
-        return MealsUtil.getWithExceeded(service.getAll(getAuthUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+        return service.getAll(getAuthUserId());
 
     }
 
@@ -57,13 +59,16 @@ public class MealRestController {
         service.update(meal, getAuthUserId());
     }
 
-    public List<MealWithExceed> getFilterByDate(LocalDate start, LocalDate end) {
-        return MealsUtil.getMealWithExceeds(service.getFilterDate(start, end, getAuthUserId()), getAll());
+    public List<MealWithExceed> getFilterByDateAndTime(LocalDate startDate, LocalDate endDate,
+                                                       LocalTime startTime, LocalTime endTime) {
+        LocalDate startLocalDate = startDate == null ? LocalDate.MIN : startDate;
+        LocalDate endLocalDate = endDate == null ? LocalDate.MAX : endDate;
+        LocalTime startLocalTime = startTime == null ? LocalTime.MIN : startTime;
+        LocalTime endLocalTime = endTime == null ? LocalTime.MAX : endTime;
+        return service.getFilterDate(startLocalDate, endLocalDate, getAuthUserId()).stream()
+                .filter(mealWithExceed -> DateTimeUtil.isBetween(mealWithExceed.getDateTime().toLocalTime(),
+                        startLocalTime, endLocalTime))
+                .sorted(Comparator.comparing(MealWithExceed::getDateTime).reversed())
+                .collect(Collectors.toList());
     }
-
-    public List<MealWithExceed> getFilterByTime(LocalDate startDate, LocalDate endDate, LocalTime start, LocalTime end) {
-        return MealsUtil.getMealWithExceeds(service.getFilterTime(startDate, endDate, start, end, getAuthUserId()), getAll());
-    }
-
-
 }
