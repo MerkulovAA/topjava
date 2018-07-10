@@ -6,13 +6,12 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.DateTimeUtil;
+import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
@@ -33,7 +32,7 @@ public class MealRestController {
 
     public List<MealWithExceed> getAll() {
         log.info("getAll");
-        return service.getAll(getAuthUserId());
+        return MealsUtil.getWithExceeded(service.getAll(getAuthUserId()), SecurityUtil.authUserCaloriesPerDay());
 
     }
 
@@ -65,10 +64,7 @@ public class MealRestController {
         LocalDate endLocalDate = endDate == null ? LocalDate.MAX : endDate;
         LocalTime startLocalTime = startTime == null ? LocalTime.MIN : startTime;
         LocalTime endLocalTime = endTime == null ? LocalTime.MAX : endTime;
-        return service.getFilterDate(startLocalDate, endLocalDate, getAuthUserId()).stream()
-                .filter(mealWithExceed -> DateTimeUtil.isBetween(mealWithExceed.getDateTime().toLocalTime(),
-                        startLocalTime, endLocalTime))
-                .sorted(Comparator.comparing(MealWithExceed::getDateTime).reversed())
-                .collect(Collectors.toList());
+        return MealsUtil.getFilteredWithExceeded(service.getFilterDate(startLocalDate, endLocalDate, getAuthUserId()),
+                SecurityUtil.authUserCaloriesPerDay(), startLocalTime, endLocalTime);
     }
 }

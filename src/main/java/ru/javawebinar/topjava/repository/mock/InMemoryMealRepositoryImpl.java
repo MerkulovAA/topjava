@@ -10,13 +10,13 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
@@ -76,18 +76,21 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         log.info("getAll");
-        return repository.values().stream()
-                .filter(meal -> meal.getUserId() == userId)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toCollection(ArrayList::new));
+        return getFilteredAndSortedMeals(userId)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Meal> getFilterByDate(LocalDate start, LocalDate end, int userId) {
-        return repository.values().stream()
-                .filter(meal -> meal.getUserId() == userId)
+        return getFilteredAndSortedMeals(userId)
                 .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), start, end))
                 .collect(Collectors.toList());
+    }
+
+    private Stream<Meal> getFilteredAndSortedMeals(int userId) {
+        return repository.values().stream()
+                .filter(meal -> meal.getUserId() == userId)
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed());
     }
 }
 
