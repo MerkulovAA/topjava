@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.data.UserTestData.*;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -45,40 +45,40 @@ public class UserServiceTest {
     }
 
     @Test(expected = DataAccessException.class)
-    public void duplicateMailCreate() throws Exception {
+    public void duplicateMailCreate() {
         service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
     }
 
     @Test
-    public void delete() throws Exception {
+    public void delete() {
         service.delete(USER_ID);
         assertMatch(service.getAll(), ADMIN);
     }
 
     @Test(expected = NotFoundException.class)
-    public void notFoundDelete() throws Exception {
+    public void notFoundDelete() {
         service.delete(1);
     }
 
     @Test
-    public void get() throws Exception {
+    public void get() {
         User user = service.get(USER_ID);
         assertMatch(user, USER);
     }
 
     @Test(expected = NotFoundException.class)
-    public void getNotFound() throws Exception {
+    public void getNotFound() {
         service.get(1);
     }
 
     @Test
-    public void getByEmail() throws Exception {
+    public void getByEmail() {
         User user = service.getByEmail("user@yandex.ru");
         assertMatch(user, USER);
     }
 
     @Test
-    public void update() throws Exception {
+    public void update() {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         updated.setCaloriesPerDay(330);
