@@ -25,9 +25,9 @@ public class MealTestData {
     public static final Meal  MEAL_USER_THREE = new Meal(MEAL_ID_USER + 2, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500);
     public static final Meal  MEAL_USER_FOUR = new Meal(MEAL_ID_USER + 3, LocalDateTime.of(2015, Month.JUNE, 30, 10, 0), "Завтрак", 850);
 
-    public static final Meal MEAL_ADMIN_ONE = new Meal(MEAL_ID_ADMIN, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Breakfast", 750);
-    public static final Meal MEAL_ADMIN_TWO = new Meal(MEAL_ID_ADMIN + 1, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Lunch", 700);
-    public static final Meal MEAL_ADMIN_THREE = new Meal(MEAL_ID_ADMIN + 2, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Dinner", 500);
+    public static final Meal MEAL_ADMIN_ONE = new Meal(MEAL_ID_ADMIN, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Breakfast admin", 750);
+    public static final Meal MEAL_ADMIN_TWO = new Meal(MEAL_ID_ADMIN + 1, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Lunch admin", 700);
+    public static final Meal MEAL_ADMIN_THREE = new Meal(MEAL_ID_ADMIN + 2, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Dinner admin", 500);
 
     public static final Meal MEAL_AFTER_CREATE =
             new Meal(100009, LocalDateTime.of(2016, Month.MAY, 30, 10, 0), "Завтрак", 1250);
