@@ -17,7 +17,7 @@ import java.util.Collection;
 
 import static ru.javawebinar.topjava.data.UserTestData.ADMIN;
 
-@ContextConfiguration("classpath:spring/spring-mock.xml")
+@ContextConfiguration("classpath:spring-test.xml")
 @RunWith(SpringRunner.class)
 public class InMemoryAdminRestControllerSpringTest {
 
