@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava;
 
-import org.junit.AssumptionViolatedException;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
@@ -15,34 +14,30 @@ public class TestStopWatch extends Stopwatch {
 
     private static final Logger log = getLogger(TestStopWatch.class);
 
-    public static Map<Description, Long> mapAllResultTest = new HashMap<>();
+    private static Map<Description, Long> mapAllResultTest = new HashMap<>();
 
-    private static void logInfo(Description description, String status, long nanos) {
-        String testName = description.getMethodName();
-        log.info(String.format("Test %s %s, spent %d microseconds",
-                testName, status, TimeUnit.NANOSECONDS.toMillis(nanos)));
-        if ("finished".equals(status)){
-            mapAllResultTest.put(description, nanos);
-        }
-    }
-    @Override
-    protected void succeeded(long nanos, Description description) {
-        logInfo(description, "succeeded", nanos);
-    }
-
-    @Override
-    protected void failed(long nanos, Throwable e, Description description) {
-        logInfo(description, "failed", nanos);
-    }
-
-    @Override
-    protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
-        logInfo(description, "skipped", nanos);
+    private static void logInfo(Description description, long nanos) {
+        log.info(String.format("Test %s - %d milliseconds", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
+        mapAllResultTest.put(description, nanos);
     }
 
     @Override
     protected void finished(long nanos, Description description) {
-        logInfo(description, "finished", nanos);
+        logInfo(description, nanos);
     }
 
+    public static void getAllStatisticTestsDuration(String className) {
+        log.info("+++++++++++++++++++++++++++++++++++++");
+        TestStopWatch.mapAllResultTest.forEach((description, aLong) -> log.info(
+                String.format("Test %s - %d milliseconds",
+                        description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(aLong))));
+
+        log.info(String.format("Total time tests %s class - %d milliseconds", className,
+                TimeUnit.NANOSECONDS.toMillis(TestStopWatch.mapAllResultTest.values().stream().mapToLong(Number::longValue).sum())));
+        log.info("+++++++++++++++++++++++++++++++++++++");
+    }
+
+    public static void clearAllStatisticsResultTests() {
+        TestStopWatch.mapAllResultTest.clear();
+    }
 }

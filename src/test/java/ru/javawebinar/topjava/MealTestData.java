@@ -37,11 +37,11 @@ public class MealTestData {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "user");
     }
 
-    public static void assertMatch(Iterable<Meal> actual, Meal... expected) throws NoSuchFieldException {
+    public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
         assertMatch(actual, Arrays.asList(expected));
     }
 
-    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) throws NoSuchFieldException {
+    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
     }
 }

@@ -21,7 +21,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -108,17 +107,13 @@ public class UserServiceTest {
     }
 
     @AfterClass
-    public static void getAllStatisticTestsDuration(){
-        System.out.println("Test duration" + "\n" + "================================================================================");
-        TestStopWatch.mapAllResultTest.forEach((description, aLong) -> {System.out.println(String.format("Test %s - %d milliseconds",
-                description.getMethodName(),TimeUnit.NANOSECONDS.toMillis(aLong)));});
-        System.out.println(String.format("Time to run all tests %s class : spent %d milliseconds", UserServiceTest.class.getName(),
-                TimeUnit.NANOSECONDS.toMillis(TestStopWatch.mapAllResultTest.values().stream().mapToLong(Number::longValue).sum())));
-        System.out.println("================================================================================");
+    public static void getStatistics() {
+        TestStopWatch.getAllStatisticTestsDuration(UserServiceTest.class.getSimpleName());
+
     }
 
     @BeforeClass
-    public static void clearAllStatisticsResultTests(){
-        TestStopWatch.mapAllResultTest.clear();
+    public static void clearAllStatisticsResultTests() {
+        TestStopWatch.clearAllStatisticsResultTests();
     }
 }
