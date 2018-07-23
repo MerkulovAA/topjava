@@ -27,17 +27,24 @@ public class TestStopWatch extends Stopwatch {
     }
 
     public static void getAllStatisticTestsDuration(String className) {
-        log.info("+++++++++++++++++++++++++++++++++++++");
-        TestStopWatch.mapAllResultTest.forEach((description, aLong) -> log.info(
-                String.format("Test %s - %d milliseconds",
-                        description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(aLong))));
 
-        log.info(String.format("Total time tests %s class - %d milliseconds", className,
+        StringBuilder stringBuilder = new StringBuilder();
+        TestStopWatch.mapAllResultTest.forEach((description, aLong) -> {
+            stringBuilder.append(String.format("Test %s - %d milliseconds",
+                    description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(aLong)));
+            stringBuilder.append("\n");
+        });
+        stringBuilder.append(String.format("Total time tests - %d milliseconds",
                 TimeUnit.NANOSECONDS.toMillis(TestStopWatch.mapAllResultTest.values().stream().mapToLong(Number::longValue).sum())));
-        log.info("+++++++++++++++++++++++++++++++++++++");
+
+        log.info("\n"  + "****************************************************************************" + "\n"
+                + "All durations tests : " + className
+                + "\n"
+                + "\n" + stringBuilder.toString()
+                + "\n" + "****************************************************************************" + "\n");
     }
 
     public static void clearAllStatisticsResultTests() {
-        TestStopWatch.mapAllResultTest.clear();
+        mapAllResultTest.clear();
     }
 }

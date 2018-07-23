@@ -26,7 +26,7 @@ public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
     public static final String ALL_SORTED = "Meal.getAllSorted";
 
-    @Column(name = "date_time")
+    @Column(name = "date_time", nullable = false)
     @NotNull
     @DateTimeFormat
     private LocalDateTime dateTime;
@@ -36,13 +36,13 @@ public class Meal extends AbstractBaseEntity {
     @Size(max = 100)
     private String description;
 
-    @Column(name = "calories")
+    @Column(name = "calories", nullable = false)
     @Range(min = 10, max = 10000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {
