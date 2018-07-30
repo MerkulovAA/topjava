@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.Role;
+import ru.javawebinar.topjava.model.User;
 
 import java.time.Month;
 import java.util.Arrays;
@@ -43,5 +45,17 @@ public class MealTestData {
 
     public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
+    }
+
+
+    public static final int USER_ID = START_SEQ;
+
+    public static final Meal MEAL_WITH_USER = new Meal(
+            MEAL1_ID, of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500,
+            new User(USER_ID, "User", "user@yandex.ru", "password", Role.ROLE_USER));
+
+
+    public static void assertMatchWithUser(Meal actual, Meal expected) {
+        assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 }

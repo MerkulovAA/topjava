@@ -18,7 +18,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 public abstract class UserServiceTest extends ServiceTest {
 
     @Autowired
-    private UserService service;
+    public UserService service;
 
     @Autowired
     private CacheManager cacheManager;
@@ -31,7 +31,7 @@ public abstract class UserServiceTest extends ServiceTest {
     @Test
     @Override
     public void create() throws Exception {
-        User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.ROLE_USER));
+        User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.ROLE_USER), null);
         User created = service.create(newUser);
         newUser.setId(created.getId());
         assertMatch(service.getAll(), ADMIN, newUser, USER);
