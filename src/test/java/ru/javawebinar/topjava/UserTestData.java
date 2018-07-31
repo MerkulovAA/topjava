@@ -6,8 +6,6 @@ import ru.javawebinar.topjava.model.User;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.javawebinar.topjava.MealTestData.ADMIN_MEAL1;
-import static ru.javawebinar.topjava.MealTestData.ADMIN_MEAL2;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class UserTestData {
@@ -32,11 +30,4 @@ public class UserTestData {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "roles", "meals").isEqualTo(expected);
     }
 
-    public static final User ADMIN_WITH_MEALS = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin",
-            Arrays.asList(ADMIN_MEAL2, ADMIN_MEAL1), Role.ROLE_ADMIN);
-
-
-    public static void assertMatchWithMeals(User actual, User expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "roles");
-    }
 }
