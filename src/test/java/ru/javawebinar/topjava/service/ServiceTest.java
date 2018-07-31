@@ -1,10 +1,10 @@
 package ru.javawebinar.topjava.service;
 
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.ExternalResource;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ public abstract class ServiceTest {
 
     private static final Logger log = getLogger("result");
 
-    private static StringBuilder results = new StringBuilder();
+    public static StringBuilder results = new StringBuilder();
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -53,31 +53,21 @@ public abstract class ServiceTest {
         }
     };
 
-    @AfterClass
-    public static void printResult() {
-        log.info("\n---------------------------------" +
-                "\nTest                 Duration, ms" +
-                "\n---------------------------------" +
-                results +
-                "\n---------------------------------");
-    }
+    @ClassRule
+    public static ExternalResource resource = new ExternalResource() {
 
-    @BeforeClass
-    public static void clearResult() {
-        results = new StringBuilder();
-    }
+        @Override
+        protected void before() {
+            results = new StringBuilder();
+        }
 
-    public abstract void getAll() throws Exception;
-
-    public abstract void update() throws Exception;
-
-    public abstract void get() throws Exception;
-
-    public abstract void delete() throws Exception;
-
-    public abstract void deletedNotFound() throws Exception;
-
-    public abstract void create() throws Exception;
-
-    public abstract void getNotFound() throws Exception;
+        @Override
+        protected void after() {
+            log.info("\n---------------------------------" +
+                    "\nTest                 Duration, ms" +
+                    "\n---------------------------------" +
+                    results +
+                    "\n---------------------------------");
+        }
+    };
 }

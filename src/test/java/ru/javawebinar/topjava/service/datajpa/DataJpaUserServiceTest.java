@@ -12,9 +12,9 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @ActiveProfiles(Profiles.DATAJPA)
 public class DataJpaUserServiceTest extends UserServiceTest {
 
-
+    // FIXME
     @Test
-    public void getById() throws Exception {
+    public void getByIdWithMeals() throws Exception {
         User actual = service.getByIdWithMeals(ADMIN_ID);
         assertMatchWithMeals(actual, ADMIN_WITH_MEALS);
     }

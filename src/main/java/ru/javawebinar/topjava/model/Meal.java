@@ -103,9 +103,11 @@ public class Meal extends AbstractBaseEntity {
         return user;
     }
 
+
     public void setUser(User user) {
         this.user = user;
     }
+
 
     @Override
     public String toString() {
@@ -113,7 +115,6 @@ public class Meal extends AbstractBaseEntity {
                 "dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
-                ", user=" + user +
                 ", id=" + id +
                 '}';
     }

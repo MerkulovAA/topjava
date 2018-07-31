@@ -72,7 +72,6 @@
 
     <beans profile="jdbc">
         <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
-        <context:component-scan base-package="ru.javawebinar.**.topjava.util.converter"/>
 
         <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
             <constructor-arg ref="dataSource"/>

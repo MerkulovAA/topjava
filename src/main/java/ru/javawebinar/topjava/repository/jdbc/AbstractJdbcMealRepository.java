@@ -7,27 +7,34 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Function;
+
 
 @Repository
-public class JdbcMealRepositoryImpl extends AbstractJdbcRepository implements MealRepository {
+public abstract class AbstractJdbcMealRepository implements MealRepository {
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
-    private final Function DateTimeConverter;
+    private final JdbcTemplate jdbcTemplate;
+
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    private final SimpleJdbcInsert jdbcInsert;
 
     @Autowired
-    public JdbcMealRepositoryImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, Function DateTimeConverter) {
-        super(jdbcTemplate, namedParameterJdbcTemplate);
+    public AbstractJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("meals")
                 .usingGeneratedKeyColumns("id");
-        this.DateTimeConverter = DateTimeConverter;
+        this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+
     }
 
     @Override
@@ -37,8 +44,8 @@ public class JdbcMealRepositoryImpl extends AbstractJdbcRepository implements Me
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
-                .addValue("date_time", DateTimeConverter.apply(meal.getDateTime()))
-                .addValue("user_id", userId);
+                .addValue("user_id", userId)
+                .addValue("date_time", getDateTimeConverter(meal.getDateTime()));
 
         if (meal.isNew()) {
             Number newId = jdbcInsert.executeAndReturnKey(map);
@@ -78,11 +85,10 @@ public class JdbcMealRepositoryImpl extends AbstractJdbcRepository implements Me
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=?  AND date_time BETWEEN  ? AND ? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, DateTimeConverter.apply(startDate), DateTimeConverter.apply(endDate));
+                ROW_MAPPER, userId, getDateTimeConverter(startDate), getDateTimeConverter(endDate));
     }
 
-    @Override
-    public Meal getByIDWithUser(int id, int userId) {
-        throw new UnsupportedOperationException();
-    }
+
+    public abstract <T> T getDateTimeConverter(LocalDateTime localDateTime);
+
 }

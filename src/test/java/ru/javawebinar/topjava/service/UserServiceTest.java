@@ -29,7 +29,6 @@ public abstract class UserServiceTest extends ServiceTest {
     }
 
     @Test
-    @Override
     public void create() throws Exception {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.ROLE_USER), null);
         User created = service.create(newUser);
@@ -44,28 +43,24 @@ public abstract class UserServiceTest extends ServiceTest {
     }
 
     @Test
-    @Override
     public void delete() throws Exception {
         service.delete(USER_ID);
         assertMatch(service.getAll(), ADMIN);
     }
 
     @Test
-    @Override
     public void deletedNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
         service.delete(1);
     }
 
     @Test
-    @Override
     public void get() throws Exception {
         User user = service.get(USER_ID);
         assertMatch(user, USER);
     }
 
     @Test
-    @Override
     public void getNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
         service.get(1);
@@ -78,7 +73,6 @@ public abstract class UserServiceTest extends ServiceTest {
     }
 
     @Test
-    @Override
     public void update() throws Exception {
         User updated = new User(USER);
         updated.setName("UpdatedName");
@@ -88,7 +82,6 @@ public abstract class UserServiceTest extends ServiceTest {
     }
 
     @Test
-    @Override
     public void getAll() throws Exception {
         List<User> all = service.getAll();
         assertMatch(all, ADMIN, USER);

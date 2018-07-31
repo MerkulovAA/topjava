@@ -1,8 +1,6 @@
 package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
 
 import java.time.Month;
 import java.util.Arrays;
@@ -10,6 +8,7 @@ import java.util.List;
 
 import static java.time.LocalDateTime.of;
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.javawebinar.topjava.UserTestData.USER;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
@@ -51,8 +50,7 @@ public class MealTestData {
     public static final int USER_ID = START_SEQ;
 
     public static final Meal MEAL_WITH_USER = new Meal(
-            MEAL1_ID, of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500,
-            new User(USER_ID, "User", "user@yandex.ru", "password", Role.ROLE_USER));
+            MEAL1_ID, of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500,USER);
 
 
     public static void assertMatchWithUser(Meal actual, Meal expected) {

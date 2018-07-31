@@ -13,7 +13,7 @@ import static ru.javawebinar.topjava.MealTestData.*;
 public class DataJpaMealServiceTest extends MealServiceTest {
 
     @Test
-    public void getById() throws Exception {
+    public void getByIdWithUser() throws Exception {
         Meal actual = service.getByIdWithUser(MEAL1_ID,USER_ID );
         assertMatchWithUser(actual, MEAL_WITH_USER);
     }
