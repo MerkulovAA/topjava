@@ -58,7 +58,7 @@ public abstract class ServiceTest {
 
         @Override
         protected void before() {
-            results = new StringBuilder();
+            results.setLength(0);
         }
 
         @Override
