@@ -55,7 +55,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
             return null;
         }
         jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
-        insertBatch(new ArrayList<>(user.getRoles()), user);
+        insertBatch(user);
         return user;
     }
 
@@ -101,8 +101,9 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         return user;
     }
 
-    private void insertBatch(final List<Role> roles, User user) {
+    private void insertBatch(User user) {
         if (user != null) {
+            final List<Role> roles = new ArrayList<>(user.getRoles());
 
             String sql = "INSERT INTO user_roles " +
                     "(role, user_id) VALUES (?, ?)";
@@ -115,7 +116,6 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                     ps.setString(1, role.name());
                     ps.setInt(2, user.getId());
                 }
-
                 @Override
                 public int getBatchSize() {
                     return roles.size();

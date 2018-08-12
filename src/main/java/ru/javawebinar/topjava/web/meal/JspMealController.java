@@ -1,7 +1,6 @@
-package ru.javawebinar.topjava.web;
+package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.javawebinar.topjava.model.Meal;
@@ -16,9 +15,6 @@ import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
-import static ru.javawebinar.topjava.util.MealsUtil.getWithExceeded;
-import static ru.javawebinar.topjava.web.SecurityUtil.authUserCaloriesPerDay;
-import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
 @Controller
 public class JspMealController extends AbstractMealController{
@@ -27,20 +23,13 @@ public class JspMealController extends AbstractMealController{
         super(service);
     }
 
-    @GetMapping("/meals")
-    public String meals(Model model) {
-        model.addAttribute("meals", getWithExceeded(service.getAll(authUserId()), authUserCaloriesPerDay()));
-        return "meals";
-    }
-
     @GetMapping("/deleteMeal")
     public String delete(HttpServletRequest request) {
         int id = getId(request);
-        service.delete(id, authUserId());
+        delete(id);
         return "redirect:meals";
 
     }
-
     @GetMapping("/newMeal")
     public String create(HttpServletRequest request) {
         Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
@@ -54,10 +43,10 @@ public class JspMealController extends AbstractMealController{
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
         if (request.getParameter("id").isEmpty()) {
-            service.create(meal, authUserId());
+            create(meal);
         } else {
             meal.setId(getId(request));
-            service.update(meal, authUserId());
+            update(meal, meal.getId());
         }
         return "redirect:meals";
     }
@@ -65,7 +54,7 @@ public class JspMealController extends AbstractMealController{
     @GetMapping("/editMeal")
     public String edit(HttpServletRequest request) {
         int id = getId(request);
-        Meal meal = service.get(id, authUserId());
+        Meal meal = get(id);
         request.setAttribute("meal", meal);
         return "mealForm";
     }
