@@ -72,4 +72,10 @@ public abstract class AbstractMealController {
         log.info("update {} for user {}", meal, userId);
         service.update(meal, userId);
     }
+
+    public List<MealWithExceed> getAll() {
+        int userId = SecurityUtil.authUserId();
+        log.info("getAll for user {}", userId);
+        return MealsUtil.getWithExceeded(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
+    }
 }

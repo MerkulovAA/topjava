@@ -14,7 +14,7 @@
 <section>
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <h2> <spring:message code="${meal.id == null ? 'meal.created' : 'meal.edited'}"/></h2>
+    <h2> <spring:message code="${meal.isNew() ? 'meal.created' : 'meal.edited'}"/></h2>
     <hr>
     <form method="post" action="saveMeal">
         <input type="hidden" name="id" value="${meal.id}">
