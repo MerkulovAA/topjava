@@ -53,8 +53,9 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 "UPDATE users SET name=:name, email=:email, password=:password, " +
                         "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
             return null;
+        } else {
+            jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
         }
-        jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
         insertBatch(user);
         return user;
     }
@@ -81,11 +82,10 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        List<Map<String, Object>> queryResult = jdbcTemplate.queryForList("SELECT * FROM user_roles");
         Map<Integer, Set<Role>> mapIdUserToRoles = new HashMap<>();
-        queryResult.forEach(stringObjectMap -> mapIdUserToRoles.computeIfAbsent((Integer) stringObjectMap.get("user_id"),
-                userId -> EnumSet.noneOf(Role.class))
-                .add(Role.valueOf((String) stringObjectMap.get("role"))));
+        jdbcTemplate.query("SELECT * FROM user_roles", (rs, i) ->
+                mapIdUserToRoles.computeIfAbsent(rs.getInt("user_id"), userId -> EnumSet.noneOf(Role.class))
+                        .add(Role.valueOf(rs.getString("role"))));
         List<User> allUsers = jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
         allUsers.forEach(user -> user.setRoles(mapIdUserToRoles.get(user.getId())));
         return allUsers;
@@ -104,12 +104,9 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     private void insertBatch(User user) {
         if (user != null) {
             final List<Role> roles = new ArrayList<>(user.getRoles());
-
             String sql = "INSERT INTO user_roles " +
                     "(role, user_id) VALUES (?, ?)";
-
             jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {
                     Role role = roles.get(i);
