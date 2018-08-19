@@ -30,6 +30,8 @@ public class MealTestData {
 
     public static final List<MealWithExceed> MEAL_WITH_EXCEEDS = MealsUtil.getWithExceeded(MEALS, authUserCaloriesPerDay());
 
+    public static final String REST_URL_GET_BETWEEN = "filter?startDate=2015-05-30&startTime=10:00&endDate=2015-05-30&endTime=";
+
     public static Meal getCreated() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
     }

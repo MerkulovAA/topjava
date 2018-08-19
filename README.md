@@ -195,3 +195,16 @@ Java Enterprise Online Project
 -  <a href="http://www.bookvoed.ru/book?id=639284">Редмонд Э.: Семь баз данных за семь недель. Введение в современные базы данных и идеологию NoSQL</a>
 -  <a href="http://www.ozon.ru/context/detail/id/3174887/">Brian Goetz: Java Concurrency in Practice</a>
 -  <a href="http://bookvoed.ru/book?id=2593572">G.L. McDowell: Cracking the Coding Interview</a>
+
+#### Rest API
+
+**For meals:**
+
+- **Base URL:** http://localhost:8080/topjava 
+
+- **GET** /rest/meals.
+- **POST** /rest/meals.
+- **GET** /rest/meals/{id}.
+- **PUT** /rest/meals/{id}.
+- **DELETE** /rest/meals/{id}.
+- **GET** /rest/meals/filter?startDate={startDate}&startTime={startTime}&endDate={endDate}&endTime={endTime}.
