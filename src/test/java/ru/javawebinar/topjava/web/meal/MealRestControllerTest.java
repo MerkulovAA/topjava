@@ -1,11 +1,13 @@
 package ru.javawebinar.topjava.web.meal;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -21,12 +23,15 @@ class MealRestControllerTest extends AbstractControllerTest {
 
     private static final String REST_URL = MealRestController.REST_URL + '/';
 
+    @Autowired
+    protected MealService mealService;
+
     @Test
     void testGetAll() throws Exception {
         TestUtil.print(mockMvc.perform(get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1)));
+                .andExpect(contentJson(MEAL_WITH_EXCEED6, MEAL_WITH_EXCEED5, MEAL_WITH_EXCEED4, MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1)));
     }
 
     @Test
@@ -79,6 +84,14 @@ class MealRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(get(REST_URL + REST_URL_GET_BETWEEN))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL3, MEAL2, MEAL1));
+                .andExpect(contentJson(MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1));
+    }
+
+    @Test
+    void testGetBetweenWithNullParameters() throws Exception {
+        mockMvc.perform(get(REST_URL + REST_URL_GET_BETWEEN_WITH_NULL_PARAMETERS))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(MEAL_WITH_EXCEED6, MEAL_WITH_EXCEED5, MEAL_WITH_EXCEED4, MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1));
     }
 }

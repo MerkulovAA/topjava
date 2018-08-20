@@ -29,8 +29,15 @@ public class MealTestData {
     public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 
     public static final List<MealWithExceed> MEAL_WITH_EXCEEDS = MealsUtil.getWithExceeded(MEALS, authUserCaloriesPerDay());
+    public static final MealWithExceed MEAL_WITH_EXCEED6 = MEAL_WITH_EXCEEDS.get(0);
+    public static final MealWithExceed MEAL_WITH_EXCEED5 = MEAL_WITH_EXCEEDS.get(1);
+    public static final MealWithExceed MEAL_WITH_EXCEED4 = MEAL_WITH_EXCEEDS.get(2);
+    public static final MealWithExceed MEAL_WITH_EXCEED3 = MEAL_WITH_EXCEEDS.get(3);
+    public static final MealWithExceed MEAL_WITH_EXCEED2 = MEAL_WITH_EXCEEDS.get(4);
+    public static final MealWithExceed MEAL_WITH_EXCEED1 = MEAL_WITH_EXCEEDS.get(5);
 
     public static final String REST_URL_GET_BETWEEN = "filter?startDate=2015-05-30&startTime=10:00&endDate=2015-05-30&endTime=";
+    public static final String REST_URL_GET_BETWEEN_WITH_NULL_PARAMETERS = "filter?startDate=&startTime=&endDate=&endTime=";
 
     public static Meal getCreated() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);

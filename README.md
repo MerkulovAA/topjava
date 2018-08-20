@@ -197,10 +197,9 @@ Java Enterprise Online Project
 -  <a href="http://bookvoed.ru/book?id=2593572">G.L. McDowell: Cracking the Coding Interview</a>
 
 #### Rest API
+**Base URL:** http://localhost:8080/topjava 
 
 **For meals:**
-
-- **Base URL:** http://localhost:8080/topjava 
 
 - **GET** /rest/meals.
 - **POST** /rest/meals.
@@ -208,3 +207,13 @@ Java Enterprise Online Project
 - **PUT** /rest/meals/{id}.
 - **DELETE** /rest/meals/{id}.
 - **GET** /rest/meals/filter?startDate={startDate}&startTime={startTime}&endDate={endDate}&endTime={endTime}.
+
+
+**For users:**
+
+- **GET** /rest/admin/users.
+- **POST** /rest/admin/users.
+- **GET** /rest/admin/users/{id}.
+- **PUT** /rest/admin/users/{id}.
+- **DELETE** /rest/admin/users/{id}.
+- **GET** /rest/admin/users/by?email={email}.
