@@ -30,7 +30,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(Collections.singletonList(ADMIN), ignoreProps));
+                .andExpect(contentJson(Collections.singletonList(ADMIN), false, ignoreProps));
     }
 
     @Test
@@ -38,7 +38,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(get(REST_URL + "by?email=" + USER.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(Collections.singletonList(USER), ignoreProps));
+                .andExpect(contentJson(Collections.singletonList(USER), false, ignoreProps));
     }
 
     @Test
@@ -82,6 +82,6 @@ class AdminRestControllerTest extends AbstractControllerTest {
         TestUtil.print(mockMvc.perform(get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(Arrays.asList(ADMIN, USER), ignoreProps)));
+                .andExpect(contentJson(Arrays.asList(ADMIN, USER), true, ignoreProps)));
     }
 }

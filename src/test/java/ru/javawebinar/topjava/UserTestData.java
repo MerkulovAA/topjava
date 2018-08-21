@@ -26,9 +26,4 @@ public class UserTestData {
     public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "meals").isEqualTo(expected);
     }
-
-//    @SafeVarargs
-//    public static <T> ResultMatcher contentJson(T... expected) {
-//        return expected.length == 1 ? content().json(writeIgnoreProps(expected[0], "registered")) : content().json(writeIgnoreProps(Arrays.asList(expected), "registered"));
-//    }
 }

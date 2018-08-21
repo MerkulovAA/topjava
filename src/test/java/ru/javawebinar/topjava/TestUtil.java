@@ -25,7 +25,7 @@ public class TestUtil {
         return JsonUtil.readValue(getContent(action), clazz);
     }
 
-    public static <T> ResultMatcher contentJson(List<T> expected, String... ignoreProps) {
-        return expected.size() == 1 ? content().json(writeIgnoreProps(expected.get(0), ignoreProps)) : content().json(writeIgnoreProps(expected, ignoreProps));
+    public static <T> ResultMatcher contentJson(List<T> expected, boolean isCollection, String... ignoreProps) {
+        return expected.size() == 1 && !isCollection ? content().json(writeIgnoreProps(expected.get(0), ignoreProps)) : content().json(writeIgnoreProps(expected, ignoreProps));
     }
 }

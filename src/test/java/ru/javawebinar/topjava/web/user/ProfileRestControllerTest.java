@@ -26,7 +26,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 mockMvc.perform(get(REST_URL))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(contentJson(Collections.singletonList(USER), ignoreProps)));
+                        .andExpect(contentJson(Collections.singletonList(USER), false, ignoreProps)));
     }
 
     @Test
