@@ -11,13 +11,16 @@ import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.TestUtil.contentJson;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
-import static ru.javawebinar.topjava.UserTestData.contentJson;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -31,7 +34,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         TestUtil.print(mockMvc.perform(get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL_WITH_EXCEED6, MEAL_WITH_EXCEED5, MEAL_WITH_EXCEED4, MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1)));
+                .andExpect(contentJson(Arrays.asList(MEAL_WITH_EXCEED6, MEAL_WITH_EXCEED5, MEAL_WITH_EXCEED4, MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1))));
     }
 
     @Test
@@ -41,7 +44,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL1));
+                .andExpect(contentJson(Collections.singletonList(MEAL1)));
     }
 
     @Test
@@ -84,7 +87,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(get(REST_URL + REST_URL_GET_BETWEEN))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1));
+                .andExpect(contentJson(Arrays.asList(MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1)));
     }
 
     @Test
@@ -92,6 +95,6 @@ class MealRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(get(REST_URL + REST_URL_GET_BETWEEN_WITH_NULL_PARAMETERS))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL_WITH_EXCEED6, MEAL_WITH_EXCEED5, MEAL_WITH_EXCEED4, MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1));
+                .andExpect(contentJson(Arrays.asList(MEAL_WITH_EXCEED6, MEAL_WITH_EXCEED5, MEAL_WITH_EXCEED4, MEAL_WITH_EXCEED3, MEAL_WITH_EXCEED2, MEAL_WITH_EXCEED1)));
     }
 }

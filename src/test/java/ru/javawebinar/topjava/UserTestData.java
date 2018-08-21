@@ -1,15 +1,12 @@
 package ru.javawebinar.topjava;
 
-import org.springframework.test.web.servlet.ResultMatcher;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
-import static ru.javawebinar.topjava.web.json.JsonUtil.writeIgnoreProps;
 
 public class UserTestData {
     public static final int USER_ID = START_SEQ;
@@ -30,11 +27,8 @@ public class UserTestData {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "meals").isEqualTo(expected);
     }
 
-    public static <T> ResultMatcher contentJson(T... expected) {
-        return content().json(writeIgnoreProps(Arrays.asList(expected), "registered"));
-    }
-
-    public static <T> ResultMatcher contentJson(T expected) {
-        return content().json(writeIgnoreProps(expected, "registered"));
-    }
+//    @SafeVarargs
+//    public static <T> ResultMatcher contentJson(T... expected) {
+//        return expected.length == 1 ? content().json(writeIgnoreProps(expected[0], "registered")) : content().json(writeIgnoreProps(Arrays.asList(expected), "registered"));
+//    }
 }
