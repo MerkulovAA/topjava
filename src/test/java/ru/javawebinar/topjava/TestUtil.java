@@ -1,9 +1,14 @@
 package ru.javawebinar.topjava;
 
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static ru.javawebinar.topjava.web.json.JsonUtil.writeValue;
 
 public class TestUtil {
 
@@ -18,5 +23,10 @@ public class TestUtil {
 
     public static <T> T readFromJson(ResultActions action, Class<T> clazz) throws UnsupportedEncodingException {
         return JsonUtil.readValue(getContent(action), clazz);
+    }
+
+    @SafeVarargs
+    public static <T> ResultMatcher contentJson(T... expected) {
+        return expected.length == 1 ? content().json(writeValue(expected[0])) : content().json(writeValue(Arrays.asList(expected)));
     }
 }
