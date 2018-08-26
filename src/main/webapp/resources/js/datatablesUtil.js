@@ -1,7 +1,7 @@
 function makeEditable() {
-    $(".delete").click(function () {
-        deleteRow($(this).attr("id"));
-    });
+    // $(".delete").click(function () {
+    //     deleteRow($(this).attr("id"));
+    // });
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
@@ -10,6 +10,10 @@ function makeEditable() {
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
 }
+
+// function deleteObject(id) {
+//     deleteRow(id);
+// }
 
 function add() {
     $("#detailsForm").find(":input").val("");
