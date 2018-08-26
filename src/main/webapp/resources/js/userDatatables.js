@@ -1,6 +1,18 @@
 var ajaxUrl = "ajax/admin/users/";
 var datatableApi;
 
+
+function changeEnable(object, id) {
+    $.ajax({
+        url: ajaxUrl + 'changed',
+        type: 'POST',
+        data: {strID: id, strState: object.checked}
+    }).done(function () {
+        updateTable();
+        successNoty("changed");
+    });
+}
+
 // $(document).ready(function () {
 $(function () {
     datatableApi = $("#datatable").DataTable({

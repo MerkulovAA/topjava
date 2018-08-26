@@ -15,6 +15,47 @@
     <div class="container">
         <h3><spring:message code="meal.title"/></h3>
         <br/>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><spring:message code="meal.filterTitle"/></h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="filter">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="startDate"><spring:message code="meal.startDate"/></label>
+                                        <input class="form-control col-md-5" id="startDate" name="startDate"/>
+                                        <label class="control-label" for="endDate"><spring:message code="meal.endDate"/></label>
+                                        <input class="form-control col-md-5" id="endDate" name="endDate"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="startTime"><spring:message code="meal.startTime"/></label>
+                                        <input class="form-control col-md-3" id="startTime" name="startTime"/>
+                                        <label class="control-label" for="endTime"><spring:message code="meal.endTime"/></label>
+                                        <input class="form-control col-md-3" id="endTime" name="endTime"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-secondary" onclick="clearForm();">
+                            <span class="fa fa-close"></span>
+                            <spring:message code="common.cancel"/>
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="filters();">
+                            <span class="fa fa-filter"></span>
+                            <spring:message code="meal.filter"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <button class="btn btn-primary" onclick="add()">
             <span class="fa fa-plus"></span>
             <spring:message code="common.add"/>
@@ -79,7 +120,7 @@
                     <span class="fa fa-close"></span>
                     <spring:message code="common.cancel"/>
                 </button>
-                <button type="button" class="btn btn-primary" onclick="save()">
+                <button type="button" class="btn btn-primary" onclick="saveMeal();">
                     <span class="fa fa-check"></span>
                     <spring:message code="common.save"/>
                 </button>
