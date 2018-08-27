@@ -6,9 +6,9 @@ function changeEnable(object, id) {
     $.ajax({
         url: ajaxUrl + 'changed',
         type: 'POST',
-        data: {strID: id, strState: object.checked}
+        data: {userId: id, enabled: object.checked}
     }).done(function () {
-        updateTable();
+        $('#' + id).attr('data-userEnable', object.checked);
         successNoty("changed");
     });
 }

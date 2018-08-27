@@ -23,9 +23,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     @Autowired
-    private CacheManager cacheManager;
-
-    @Autowired
     public UserServiceImpl(UserRepository repository) {
         this.repository = repository;
     }
@@ -72,12 +69,12 @@ public class UserServiceImpl implements UserService {
         return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Override
     @Transactional
-    public void changeEnable(boolean enable, int id) {
-        User user = checkNotFoundWithId(repository.get(id), id);
-        user.setEnabled(enable);
-        cacheManager.getCache("users").clear();
-        checkNotFoundWithId(repository.save(user), user.getId());
+    public void changeEnable(boolean enabled, int userId) {
+        User user = get(userId);
+        user.setEnabled(enabled);
+        update(user);
     }
 }

@@ -13,19 +13,6 @@ function filters() {
     });
 }
 
-function saveMeal() {
-    var form = $("#detailsForm");
-    $.ajax({
-        type: "POST",
-        url: ajaxUrl,
-        data: form.serialize()
-    }).done(function () {
-        $("#editRow").modal("hide");
-        filters();
-        successNoty("Saved");
-    });
-}
-
 function clearForm() {
     var form = $("#filter");
     form[0].reset();
@@ -73,7 +60,7 @@ $(function () {
         format: 'Y-m-d'
     });
     $('#startTime, #endTime').datetimepicker({
-        datepicker:false,
+        datepicker: false,
         format: 'H:i'
     });
 

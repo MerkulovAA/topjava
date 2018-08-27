@@ -49,7 +49,7 @@ public abstract class AbstractUserController {
         return service.getByEmail(email);
     }
 
-    public void changeEnable(boolean enable, int id){
-        service.changeEnable(enable, id);
+    public void changeEnable(boolean enabled, int userId){
+        service.changeEnable(enabled, userId);
     }
 }
