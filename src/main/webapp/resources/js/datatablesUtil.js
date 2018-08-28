@@ -18,20 +18,20 @@ function deleteRow(id) {
         url: ajaxUrl + id,
         type: "DELETE",
         success: function () {
-            if (ajaxUrl === 'ajax/admin/users/') {
-                updateTable();
-            } else {
-                filters();
-            }
+            updateTable();
             successNoty("Deleted");
         }
     });
 }
 
 function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        updateTableWithData(data)
-    });
+    if (ajaxUrl === 'ajax/admin/users/') {
+        $.get(ajaxUrl, function (data) {
+            updateTableWithData(data)
+        });
+    } else {
+        filters();
+    }
 }
 
 function updateTableWithData(data) {
@@ -46,11 +46,7 @@ function save() {
         data: form.serialize(),
         success: function () {
             $("#editRow").modal("hide");
-            if (ajaxUrl === 'ajax/admin/users/') {
-                updateTable();
-            } else {
-                filters();
-            }
+            updateTable();
             successNoty("Saved");
         }
     });
