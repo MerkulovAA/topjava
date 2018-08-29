@@ -4,7 +4,6 @@ var datatableApi;
 function changeEnable() {
     var object = event.target;
     var id = $(event.target).closest('tr').attr('id');
-    ;
     $.ajax({
         url: ajaxUrl + 'changed',
         type: 'POST',
