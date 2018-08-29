@@ -16,7 +16,19 @@ function filters() {
 function clearForm() {
     var form = $("#filter");
     form[0].reset();
-    updateTable();
+    filters();
+}
+
+function saveMeal(){
+    save().done(function () {
+        filters();
+    });
+}
+
+function deleteMeal(){
+    deleteRow(getIdTr()).done(function () {
+        filters();
+    });
 }
 
 // $(document).ready(function () {

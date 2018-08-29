@@ -2,7 +2,9 @@ var ajaxUrl = "ajax/admin/users/";
 var datatableApi;
 
 
-function changeEnable(object, id) {
+function changeEnable() {
+    var object = event.target;
+    var id = getIdTr();
     $.ajax({
         url: ajaxUrl + 'changed',
         type: 'POST',
@@ -10,6 +12,26 @@ function changeEnable(object, id) {
     }).done(function () {
         $('#' + id).attr('data-userEnable', object.checked);
         successNoty("changed");
+    });
+}
+
+
+function saveUser(){
+    save().done(function () {
+        updateUserTable();
+    })
+}
+
+function deleteUser() {
+    deleteRow(getIdTr()).done(function () {
+        updateUserTable();
+    });
+
+}
+
+function updateUserTable(){
+    $.get(ajaxUrl, function (data) {
+        updateTableWithData(data)
     });
 }
 

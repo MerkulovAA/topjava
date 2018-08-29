@@ -14,24 +14,12 @@ function add() {
 }
 
 function deleteRow(id) {
-    $.ajax({
+    return $.ajax({
         url: ajaxUrl + id,
-        type: "DELETE",
-        success: function () {
-            updateTable();
-            successNoty("Deleted");
-        }
+        type: "DELETE"
+    }).done(function () {
+        successNoty("Deleted");
     });
-}
-
-function updateTable() {
-    if (ajaxUrl === 'ajax/admin/users/') {
-        $.get(ajaxUrl, function (data) {
-            updateTableWithData(data)
-        });
-    } else {
-        filters();
-    }
 }
 
 function updateTableWithData(data) {
@@ -40,16 +28,18 @@ function updateTableWithData(data) {
 
 function save() {
     var form = $("#detailsForm");
-    $.ajax({
+    return $.ajax({
         type: "POST",
         url: ajaxUrl,
-        data: form.serialize(),
-        success: function () {
-            $("#editRow").modal("hide");
-            updateTable();
-            successNoty("Saved");
-        }
+        data: form.serialize()
+    }).done(function () {
+        $("#editRow").modal("hide");
+        successNoty("Saved");
     });
+}
+
+function getIdTr() {
+    return $(event.target).closest('tr').attr('id');
 }
 
 var failedNote;

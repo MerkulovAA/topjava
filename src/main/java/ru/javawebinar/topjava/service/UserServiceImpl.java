@@ -72,8 +72,8 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(value = "users", allEntries = true)
     @Override
     @Transactional
-    public void changeEnable(boolean enabled, int userId) {
-        User user = get(userId);
+    public void changeEnable(boolean enabled, int id) {
+        User user = get(id);
         user.setEnabled(enabled);
         update(user);
     }
