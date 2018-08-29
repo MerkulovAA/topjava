@@ -1,10 +1,10 @@
 var ajaxUrl = "ajax/admin/users/";
 var datatableApi;
 
-
 function changeEnable() {
     var object = event.target;
-    var id = getIdTr();
+    var id = $(event.target).closest('tr').attr('id');
+    ;
     $.ajax({
         url: ajaxUrl + 'changed',
         type: 'POST',
@@ -16,20 +16,7 @@ function changeEnable() {
 }
 
 
-function saveUser(){
-    save().done(function () {
-        updateUserTable();
-    })
-}
-
-function deleteUser() {
-    deleteRow(getIdTr()).done(function () {
-        updateUserTable();
-    });
-
-}
-
-function updateUserTable(){
+function updateTable() {
     $.get(ajaxUrl, function (data) {
         updateTableWithData(data)
     });

@@ -1,7 +1,7 @@
 var ajaxUrl = "ajax/meals/";
 var datatableApi;
 
-function filters() {
+function updateTable() {
     var formFilter = $("#filter");
     $.ajax({
         type: "POST",
@@ -16,19 +16,7 @@ function filters() {
 function clearForm() {
     var form = $("#filter");
     form[0].reset();
-    filters();
-}
-
-function saveMeal(){
-    save().done(function () {
-        filters();
-    });
-}
-
-function deleteMeal(){
-    deleteRow(getIdTr()).done(function () {
-        filters();
-    });
+    updateTable();
 }
 
 // $(document).ready(function () {

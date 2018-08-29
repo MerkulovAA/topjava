@@ -13,11 +13,13 @@ function add() {
     $("#editRow").modal();
 }
 
-function deleteRow(id) {
-    return $.ajax({
+function deleteRow() {
+    var id = $(event.target).closest('tr').attr('id');
+    $.ajax({
         url: ajaxUrl + id,
         type: "DELETE"
     }).done(function () {
+        updateTable();
         successNoty("Deleted");
     });
 }
@@ -28,18 +30,15 @@ function updateTableWithData(data) {
 
 function save() {
     var form = $("#detailsForm");
-    return $.ajax({
+    $.ajax({
         type: "POST",
         url: ajaxUrl,
         data: form.serialize()
     }).done(function () {
         $("#editRow").modal("hide");
+        updateTable();
         successNoty("Saved");
     });
-}
-
-function getIdTr() {
-    return $(event.target).closest('tr').attr('id');
 }
 
 var failedNote;
