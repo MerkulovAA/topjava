@@ -21,7 +21,7 @@ function updateRow(id) {
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             if (key === 'dateTime') {
-                value = value.substring(0, 10) + ' ' + value.substring(11, 16);
+                value = getDateTime(value);
             }
             form.find("input[name='" + key + "']").val(value);
         });
@@ -39,6 +39,10 @@ function deleteRow(id) {
     });
 }
 
+function getDateTime(value) {
+    return value.substring(0,10) + ' ' + value.substring(11, 16)
+}
+
 function updateTableByData(data) {
     datatableApi.clear().rows.add(data).draw();
 }
@@ -47,7 +51,7 @@ function save() {
     $.ajax({
         type: "POST",
         url: ajaxUrl,
-        data: getForm(form).serialize()
+        data: form.serialize()
     }).done(function () {
         $("#editRow").modal("hide");
         updateTable();

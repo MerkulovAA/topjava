@@ -14,11 +14,11 @@ function clearFilter() {
     $.get(ajaxUrl, updateTableByData);
 }
 
-function getForm(form) {
-    let value = form.find("input[name='dateTime']").val();
-    form.find("input[name='dateTime']").val(value.substring(0,16).replace(' ', 'T'));
-    return form;
-}
+// function getForm(form) {
+//     // let value = form.find("input[name='dateTime']").val();
+//     // form.find("input[name='dateTime']").val(value.substring(0,16).replace(' ', 'T'));
+//     return form;
+// }
 
 $(function () {
     datatableApi = $("#datatable").DataTable({
@@ -33,7 +33,7 @@ $(function () {
                 "data": "dateTime",
                 "render": function (dateTime, type, row) {
                     if (type === "display") {
-                        dateTime = dateTime.substring(0,10) + ' ' + dateTime.substring(11, 16)
+                        dateTime = getDateTime(dateTime);
                     }
                     return dateTime;
                 }

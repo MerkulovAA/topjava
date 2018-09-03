@@ -20,9 +20,9 @@ function enable(chkbox, id) {
     });
 }
 
-function getForm(form){
-    return form;
-}
+// function getForm(form){
+//     return form;
+// }
 
 // $(document).ready(function () {
 $(function () {
