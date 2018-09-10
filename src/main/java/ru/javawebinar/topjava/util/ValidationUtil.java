@@ -73,4 +73,10 @@ public class ValidationUtil {
     public static String getMessage(Throwable e) {
         return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
     }
+
+    public static void addErrorDuplicateEmailInBindingResult(BindingResult result) {
+        if (result != null) {
+            result.rejectValue("email", "error.userDuplicateEmail");
+        }
+    }
 }

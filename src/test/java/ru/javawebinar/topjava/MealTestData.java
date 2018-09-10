@@ -25,14 +25,18 @@ public class MealTestData {
 
     public static final String VALIDATION_CALORIES_SIZE = "calories must be between 10 and 5000";
     public static final String VALIDATION_DESCRIPTION_SIZE = "description size must be between 2 and 120";
+    public static final String ERROR_MESSAGE_DUPLICATE_DATETIME = "Meal with this date and time already exist";
 
     public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 
     public static Meal getCreated() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
     }
-    public static Meal getCreatedWithvalidation() {
+    public static Meal getCreatedWithValidation() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Завтрак", 0);
+    }
+    public static Meal getCreatedWithDuplicateDateTime() {
+        return new Meal(null, of(2015, Month.JUNE, 1, 14, 0), "Завтрак", 500);
     }
 
     public static Meal getUpdated() {
@@ -41,6 +45,10 @@ public class MealTestData {
 
     public static Meal getUpdatedWithValidation() {
         return new Meal(MEAL1_ID, MEAL1.getDateTime(), "з", 500);
+    }
+
+    public static Meal getUpdatedWithDuplicateDateTime() {
+        return new Meal(MEAL1_ID, MEAL2.getDateTime(), "Обновленный завтрак", 500);
     }
 
     public static void assertMatch(Meal actual, Meal expected) {

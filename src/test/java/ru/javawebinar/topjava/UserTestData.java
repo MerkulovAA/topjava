@@ -20,6 +20,7 @@ public class UserTestData {
     public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", 1900, Role.ROLE_ADMIN, Role.ROLE_USER);
     public static final String VALIDATION_NAME_SIZE = "name size must be between 2 and 100";
     public static final String VALIDATION_EMAIL = "email must be a well-formed email address";
+    public static final String ERROR_MESSAGE_DUPLICATE_EMAIL = "User with this email already exists";
 
     public static void assertMatch(User actual, User expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "meals", "password");
