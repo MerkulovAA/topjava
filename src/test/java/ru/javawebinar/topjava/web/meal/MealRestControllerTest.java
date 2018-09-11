@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -18,16 +17,15 @@ import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.MealTestData.assertMatch;
 import static ru.javawebinar.topjava.TestUtil.contentJson;
 import static ru.javawebinar.topjava.TestUtil.*;
 import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
-import static ru.javawebinar.topjava.util.exception.ErrorType.*;
+import static ru.javawebinar.topjava.util.exception.ErrorType.DATA_ERROR;
+import static ru.javawebinar.topjava.util.exception.ErrorType.VALIDATION_ERROR;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -95,8 +93,8 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(USER)))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(VALIDATION_DESCRIPTION_SIZE))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(VALIDATION_DESCRIPTION_SIZE))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -109,8 +107,8 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(USER)))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(DATA_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(ERROR_MESSAGE_DUPLICATE_DATETIME))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_DATETIME))
                 .andExpect(status().isConflict());
     }
 
@@ -137,8 +135,8 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(created))
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(VALIDATION_CALORIES_SIZE))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(VALIDATION_CALORIES_SIZE))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -151,8 +149,8 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(created))
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(DATA_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(ERROR_MESSAGE_DUPLICATE_DATETIME))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_DATETIME))
                 .andExpect(status().isConflict());
     }
 

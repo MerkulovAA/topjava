@@ -30,6 +30,8 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 abstract public class AbstractControllerTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
+    protected static final String ERROR_INFO_TYPE = "$.type";
+    protected static final String ERROR_INFO_DETAILS = "$.details";
 
     static {
         CHARACTER_ENCODING_FILTER.setEncoding("UTF-8");

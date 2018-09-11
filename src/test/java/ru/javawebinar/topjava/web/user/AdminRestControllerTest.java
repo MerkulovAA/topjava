@@ -110,8 +110,8 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated))
                 .content(jsonWithPassword(updated, updated.getPassword())))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(VALIDATION_NAME_SIZE))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(VALIDATION_NAME_SIZE))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -127,8 +127,8 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated))
                 .content(jsonWithPassword(updated, updated.getPassword())))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(DATA_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(ERROR_MESSAGE_DUPLICATE_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_EMAIL))
                 .andExpect(status().isConflict());
     }
 
@@ -156,8 +156,8 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .content(jsonWithPassword(expected, "newPass")))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(VALIDATION_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(VALIDATION_EMAIL))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -170,8 +170,8 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .content(jsonWithPassword(expected, "newPass")))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(DATA_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(ERROR_MESSAGE_DUPLICATE_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_EMAIL))
                 .andExpect(status().isConflict());
     }
 

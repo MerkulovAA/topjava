@@ -30,6 +30,11 @@ import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
 
+    private static final String UNIQUE_EMAIL = "users_unique_email_idx";
+    private static final String UNIQUE_DATE_TIME = "meals_unique_user_datetime_idx";
+    private static final String DUPLICATE_EMAIL_CODE = "error.userDuplicateEmail";
+    private static final String DUPLICATE_DATE_TIME_CODE = "error.mealDuplicateDate";
+
     @Autowired
     private ReloadableResourceBundleMessageSource bundleMessageSource;
 
@@ -45,7 +50,12 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
-        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
+        Throwable rootCause = ValidationUtil.getRootCause(e);
+        String message = (ValidationUtil.getMessage(rootCause)).contains(UNIQUE_EMAIL) ?
+                bundleMessageSource.getMessage(DUPLICATE_EMAIL_CODE, null, req.getLocale())
+                : (ValidationUtil.getMessage(rootCause)).contains(UNIQUE_DATE_TIME) ?
+                bundleMessageSource.getMessage(DUPLICATE_DATE_TIME_CODE, null, req.getLocale()) : ValidationUtil.getMessage(rootCause);
+        return logAndGetErrorInfo(req, e, true, DATA_ERROR, message);
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
@@ -55,9 +65,17 @@ public class ExceptionInfoHandler {
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
-    @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
-    public ErrorInfo validationError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
+    @ExceptionHandler(BindException.class)
+    public ErrorInfo validationError(HttpServletRequest req, BindException e) {
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR,
+                ValidationUtil.getErrorResponse(e.getBindingResult()));
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorInfo methodArgumentNotValidError(HttpServletRequest req, MethodArgumentNotValidException e) {
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR,
+                ValidationUtil.getErrorResponse(e.getBindingResult()));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -68,24 +86,17 @@ public class ExceptionInfoHandler {
 
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
-    private ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... exceptionMessage) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
-        String message = (ValidationUtil.getMessage(rootCause)).contains("users_unique_email_idx") ?
-                bundleMessageSource.getMessage("error.userDuplicateEmail", null, req.getLocale())
-                : (ValidationUtil.getMessage(rootCause)).contains("meals_unique_user_datetime_idx") ?
-                bundleMessageSource.getMessage("error.mealDuplicateDate", null, req.getLocale()) : ValidationUtil.getMessage(rootCause);
         if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        if (e instanceof BindException) {
-            return new ErrorInfo(req.getRequestURL(), errorType,
-                    ValidationUtil.getErrorResponse(((BindException) e).getBindingResult(), "<br>"));
+        if (exceptionMessage.length != 0) {
+            return new ErrorInfo(req.getRequestURL(), errorType, exceptionMessage);
+        } else {
+            return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getMessage(rootCause));
         }
-        if (e instanceof MethodArgumentNotValidException) {
-            return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getErrorResponse((((MethodArgumentNotValidException) e).getBindingResult()), ";"));
-        }
-        return new ErrorInfo(req.getRequestURL(), errorType, message);
     }
 }

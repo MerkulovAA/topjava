@@ -5,7 +5,8 @@ import ru.javawebinar.topjava.HasId;
 import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.StringJoiner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ValidationUtil {
 
@@ -57,17 +58,17 @@ public class ValidationUtil {
         return result;
     }
 
-    public static String getErrorResponse(BindingResult result, String delimiter) {
-        StringJoiner joiner = new StringJoiner(delimiter);
+    public static String[] getErrorResponse(BindingResult result) {
+        List<String> errors = new ArrayList<>();
         result.getFieldErrors().forEach(
                 fe -> {
                     String msg = fe.getDefaultMessage();
                     if (!msg.startsWith(fe.getField())) {
                         msg = fe.getField() + ' ' + msg;
                     }
-                    joiner.add(msg);
+                    errors.add(msg);
                 });
-        return joiner.toString();
+        return errors.toArray(new String[0]);
     }
 
     public static String getMessage(Throwable e) {

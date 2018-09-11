@@ -45,4 +45,7 @@
             </ul>
         </div>
     </div>
+    <script type="text/javascript">
+        let locale = '${pageContext.response.locale}';
+    </script>
 </nav>

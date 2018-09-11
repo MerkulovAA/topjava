@@ -68,8 +68,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(VALIDATION_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(VALIDATION_EMAIL))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -82,8 +82,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(DATA_ERROR.name()))
-                .andExpect(jsonPath("$.detail").value(ERROR_MESSAGE_DUPLICATE_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_EMAIL))
                 .andExpect(status().isConflict());
     }
 
