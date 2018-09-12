@@ -10,6 +10,13 @@ import java.util.List;
 
 public class ValidationUtil {
 
+    public static final String DUPLICATE_EMAIL_CODE = "error.userDuplicateEmail";
+    public static final String DUPLICATE_DATE_TIME_CODE = "error.mealDuplicateDate";
+    public static final String VALIDATION_CALORIES_BETWEEN_CODE = "error.caloriesBetween";
+    public static final String VALIDATION_DESCRIPTION_SIZE_CODE = "error.descriptionSize";
+    public static final String VALIDATION_EMAIL_FORMAT_CODE = "error.emailFormat";
+    public static final String VALIDATION_NAME_SIZE_CODE = "error.nameSize";
+
     public static <T> T checkNotFoundWithId(T object, int id) {
         return checkNotFound(object, "id=" + id);
     }
@@ -77,7 +84,7 @@ public class ValidationUtil {
 
     public static void addErrorDuplicateEmailInBindingResult(BindingResult result) {
         if (result != null) {
-            result.rejectValue("email", "error.userDuplicateEmail");
+            result.rejectValue("email", DUPLICATE_EMAIL_CODE);
         }
     }
 }

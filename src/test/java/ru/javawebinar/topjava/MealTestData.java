@@ -23,9 +23,8 @@ public class MealTestData {
     public static final Meal ADMIN_MEAL1 = new Meal(ADMIN_MEAL_ID, of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510);
     public static final Meal ADMIN_MEAL2 = new Meal(ADMIN_MEAL_ID + 1, of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500);
 
-    public static final String VALIDATION_CALORIES_SIZE = "calories must be between 10 and 5000";
-    public static final String VALIDATION_DESCRIPTION_SIZE = "description size must be between 2 and 120";
-    public static final String ERROR_MESSAGE_DUPLICATE_DATETIME = "Meal with this date and time already exist";
+//    public static final String VALIDATION_CALORIES_SIZE = "calories must be between 10 and 5000";
+//    public static final String VALIDATION_DESCRIPTION_SIZE = "description size must be between 2 and 120";
 
     public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 

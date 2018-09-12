@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.util.ValidationUtil.DUPLICATE_EMAIL_CODE;
 import static ru.javawebinar.topjava.util.exception.ErrorType.DATA_ERROR;
 import static ru.javawebinar.topjava.util.exception.ErrorType.VALIDATION_ERROR;
 import static ru.javawebinar.topjava.web.user.ProfileRestController.REST_URL;
@@ -83,7 +84,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_EMAIL_CODE, null, getLocale())))
                 .andExpect(status().isConflict());
     }
 

@@ -24,6 +24,7 @@ import static ru.javawebinar.topjava.TestUtil.contentJson;
 import static ru.javawebinar.topjava.TestUtil.*;
 import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
+import static ru.javawebinar.topjava.util.ValidationUtil.DUPLICATE_DATE_TIME_CODE;
 import static ru.javawebinar.topjava.util.exception.ErrorType.DATA_ERROR;
 import static ru.javawebinar.topjava.util.exception.ErrorType.VALIDATION_ERROR;
 
@@ -108,7 +109,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_DATETIME))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_DATE_TIME_CODE, null, getLocale())))
                 .andExpect(status().isConflict());
     }
 
@@ -144,13 +145,14 @@ class MealRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     void testCreateWithDuplicateDateTime() throws Exception {
         Meal created = getCreatedWithDuplicateDateTime();
+
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created))
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_DATETIME))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_DATE_TIME_CODE, null, getLocale())))
                 .andExpect(status().isConflict());
     }
 

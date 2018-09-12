@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.util.ValidationUtil.DUPLICATE_EMAIL_CODE;
 import static ru.javawebinar.topjava.util.exception.ErrorType.DATA_ERROR;
 import static ru.javawebinar.topjava.util.exception.ErrorType.VALIDATION_ERROR;
 
@@ -128,7 +129,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(updated, updated.getPassword())))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_EMAIL_CODE, null, getLocale())))
                 .andExpect(status().isConflict());
     }
 
@@ -171,7 +172,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(expected, "newPass")))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(ERROR_MESSAGE_DUPLICATE_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_EMAIL_CODE, null, getLocale())))
                 .andExpect(status().isConflict());
     }
 
