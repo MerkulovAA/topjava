@@ -17,8 +17,7 @@ import ru.javawebinar.topjava.repository.JpaUtil;
 import ru.javawebinar.topjava.service.UserService;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.Locale;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -46,10 +45,10 @@ abstract public class AbstractControllerTest {
     protected MockMvc mockMvc;
 
     @Autowired
-    public ReloadableResourceBundleMessageSource messageSource;
+    private ReloadableResourceBundleMessageSource messageSource;
 
     @Autowired
-    public CookieLocaleResolver localeResolver;
+    private CookieLocaleResolver localeResolver;
 
     @Autowired
     private CacheManager cacheManager;
@@ -80,14 +79,18 @@ abstract public class AbstractControllerTest {
         }
     }
 
-    protected Locale getLocale() {
+    private Locale getLocale() {
         try {
-            Method getDefaultLocale = localeResolver.getClass().getDeclaredMethod("getDefaultLocale");
-            getDefaultLocale.setAccessible(true);
-            return (Locale) getDefaultLocale.invoke(localeResolver);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            Field defaultLocale = localeResolver.getClass().getDeclaredField("defaultLocale");
+            defaultLocale.setAccessible(true);
+            return (Locale) defaultLocale.get(localeResolver);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    protected String getErrorMessageWithLocalization(String code){
+        return messageSource.getMessage(code, null, getLocale());
     }
 }

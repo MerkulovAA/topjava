@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -25,7 +24,7 @@ import static ru.javawebinar.topjava.TestUtil.contentJson;
 import static ru.javawebinar.topjava.TestUtil.*;
 import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
-import static ru.javawebinar.topjava.util.ValidationUtil.DUPLICATE_DATE_TIME_CODE;
+import static ru.javawebinar.topjava.util.ValidationUtil.*;
 import static ru.javawebinar.topjava.util.exception.ErrorType.DATA_ERROR;
 import static ru.javawebinar.topjava.util.exception.ErrorType.VALIDATION_ERROR;
 
@@ -96,7 +95,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(ValidationUtil.VALIDATION_DESCRIPTION_SIZE_CODE, null, getLocale())))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(getErrorMessageWithLocalization(VALIDATION_DESCRIPTION_SIZE_CODE)))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -110,7 +109,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_DATE_TIME_CODE, null, getLocale())))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(getErrorMessageWithLocalization(DUPLICATE_DATE_TIME_CODE)))
                 .andExpect(status().isConflict());
     }
 
@@ -138,7 +137,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(ValidationUtil.VALIDATION_CALORIES_BETWEEN_CODE, null, getLocale())))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(getErrorMessageWithLocalization(VALIDATION_CALORIES_BETWEEN_CODE)))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -153,7 +152,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_DATE_TIME_CODE, null, getLocale())))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(getErrorMessageWithLocalization(DUPLICATE_DATE_TIME_CODE)))
                 .andExpect(status().isConflict());
     }
 

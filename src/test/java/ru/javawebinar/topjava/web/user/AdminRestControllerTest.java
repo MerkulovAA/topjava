@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -20,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
-import static ru.javawebinar.topjava.util.ValidationUtil.DUPLICATE_EMAIL_CODE;
+import static ru.javawebinar.topjava.util.ValidationUtil.*;
 import static ru.javawebinar.topjava.util.exception.ErrorType.DATA_ERROR;
 import static ru.javawebinar.topjava.util.exception.ErrorType.VALIDATION_ERROR;
 
@@ -113,7 +112,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(updated, updated.getPassword())))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(ValidationUtil.VALIDATION_NAME_SIZE_CODE, null, getLocale())))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(getErrorMessageWithLocalization(VALIDATION_NAME_SIZE_CODE)))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -130,7 +129,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(updated, updated.getPassword())))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_EMAIL_CODE, null, getLocale())))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(getErrorMessageWithLocalization(DUPLICATE_EMAIL_CODE)))
                 .andExpect(status().isConflict());
     }
 
@@ -159,7 +158,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(expected, "newPass")))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(ValidationUtil.VALIDATION_EMAIL_FORMAT_CODE, null, getLocale())))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(getErrorMessageWithLocalization(VALIDATION_EMAIL_FORMAT_CODE)))
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -173,7 +172,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(expected, "newPass")))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(DATA_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(DUPLICATE_EMAIL_CODE, null, getLocale())))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(getErrorMessageWithLocalization(DUPLICATE_EMAIL_CODE)))
                 .andExpect(status().isConflict());
     }
 
