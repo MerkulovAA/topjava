@@ -24,6 +24,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 
 @RestControllerAdvice(annotations = RestController.class)
@@ -52,9 +53,9 @@ public class ExceptionInfoHandler {
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         String message = (ValidationUtil.getMessage(rootCause)).contains(UNIQUE_EMAIL) ?
-                bundleMessageSource.getMessage(DUPLICATE_EMAIL_CODE, null, req.getLocale())
+                bundleMessageSource.getMessage(DUPLICATE_EMAIL_CODE, null, getLocale())
                 : (ValidationUtil.getMessage(rootCause)).contains(UNIQUE_DATE_TIME) ?
-                bundleMessageSource.getMessage(DUPLICATE_DATE_TIME_CODE, null, req.getLocale()) : ValidationUtil.getMessage(rootCause);
+                bundleMessageSource.getMessage(DUPLICATE_DATE_TIME_CODE, null, getLocale()) : ValidationUtil.getMessage(rootCause);
         return logAndGetErrorInfo(req, e, true, DATA_ERROR, message);
     }
 

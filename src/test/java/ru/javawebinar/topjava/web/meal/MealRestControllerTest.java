@@ -138,7 +138,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(VALIDATION_CALORIES_SIZE))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(ValidationUtil.VALIDATION_CALORIES_BETWEEN_CODE, null, getLocale())))
                 .andExpect(status().isUnprocessableEntity());
     }
 

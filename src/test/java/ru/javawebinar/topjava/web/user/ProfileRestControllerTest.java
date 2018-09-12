@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
+import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -70,7 +71,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(VALIDATION_EMAIL))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(ValidationUtil.VALIDATION_EMAIL_FORMAT_CODE, null, getLocale())))
                 .andExpect(status().isUnprocessableEntity());
     }
 
