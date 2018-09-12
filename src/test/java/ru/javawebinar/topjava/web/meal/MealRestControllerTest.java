@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -95,7 +96,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(jsonPath(ERROR_INFO_TYPE).value(VALIDATION_ERROR.name()))
-                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(VALIDATION_DESCRIPTION_SIZE))
+                .andExpect(jsonPath(ERROR_INFO_DETAILS).value(messageSource.getMessage(ValidationUtil.VALIDATION_DESCRIPTION_SIZE_CODE, null, getLocale())))
                 .andExpect(status().isUnprocessableEntity());
     }
 
